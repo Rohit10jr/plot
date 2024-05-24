@@ -7,18 +7,29 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
         }
         #chartContainer {
             width: 90%;
             height: 80vh;
         }
+
+        #title{
+            display:flex;
+            justify-content: center;
+            font-size: 30px;
+            color:rgb(0, 0, 0);
+            margin:20px;
+        }
     </style>
 </head>
 <body>
+    <div id="title"> 5 Different Plots in One Graph</div>
+
     <div id="chartContainer">
         <canvas id="chartAll"></canvas>
     </div>
@@ -73,7 +84,7 @@
                     {
                         label: 'V4',
                         data: dataV4,
-                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderColor: 'rgba(251, 192, 147, 1)',
                         borderWidth: 1,
                         fill: false,
                         pointRadius: 0,
