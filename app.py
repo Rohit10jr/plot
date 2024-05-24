@@ -6,10 +6,16 @@ import json
 app = Flask(__name__)
 
 # Connect to MySQL database
+
+'''mysql connection format below'''
+# connection_string = "mysql+mysqlconnector://mysql_username:mysql_password@localhost:3306/mysql_db_name"
 connection_string = "mysql+mysqlconnector://root:1234@localhost:3306/ems_db_11"
+
 engine = create_engine(connection_string)
 metadata = MetaData()
 
+'''enter your table name'''
+# meter_data_100 = Table('table_name', metadata, autoload_with=engine)
 meter_data_100 = Table('meter_data_100', metadata, autoload_with=engine)
 
 @app.route('/')
