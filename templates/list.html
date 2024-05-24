@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Display</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data from Mysql database</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>tt</th>
+                <th>V1</th>
+                <th>V2</th>
+                <th>V3</th>
+                <th>V4</th>
+                <th>V12</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row['tt'] }}</td>
+                <td>{{ row['V1'] }}</td>
+                <td>{{ row['V2'] }}</td>
+                <td>{{ row['V3'] }}</td>
+                <td>{{ row['V4'] }}</td>
+                <td>{{ row['V12'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

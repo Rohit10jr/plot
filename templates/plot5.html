@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChartJS Plots</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="chartV1"></canvas>
+        <canvas id="chartV2"></canvas>
+        <canvas id="chartV3"></canvas>
+        <canvas id="chartV4"></canvas>
+        <canvas id="chartV12"></canvas>
+    </div>
+
+    <script>
+        // Data passed from Flask
+        const data = {{ data|tojson }};
+
+        // Extract data for plotting
+        const labels = data.map(item => item.tt);
+        const dataV1 = data.map(item => item.V1);
+        const dataV2 = data.map(item => item.V2);
+        const dataV3 = data.map(item => item.V3);
+        const dataV4 = data.map(item => item.V4);
+        const dataV12 = data.map(item => item.V12);
+
+        const interval = 100;
+
+        function getChartConfig(label, data, chartLabel) {
+            return {
+                type: 'line',
+                data: {
+                    labels: label,
+                    datasets: [{
+                        label: chartLabel,
+                        data: data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        pointRadius: 0, // Removes default point markers
+                        pointHoverRadius: 5 // Adds a larger point marker on hover
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+                                maxTicksLimit: Math.ceil(label.length / interval),
+                                callback: function(value, index) {
+                                    return index % interval === 0 ? this.getLabelForValue(value) : '';
+                                },
+                                font: {
+                                    size: 14 // Font size for x-axis labels
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(200, 200, 200, 1)', // Color for x-axis grid lines
+                                backgroundColor: 'rgba(240, 240, 240, 0.3)', // Background color for x-axis grid box
+                            },
+                            title: {
+                                display: true,
+                                text: 'tt',
+                                font: {
+                                    size: 16 // Font size for x-axis title
+                                }
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 14 // Font size for y-axis labels
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(200, 200, 200, 1)', // Color for y-axis grid lines
+                                backgroundColor: 'rgba(240, 240, 240, 0.3)', // Background color for y-axis grid box
+                            },
+                            title: {
+                                display: true,
+                                text: chartLabel,
+                                font: {
+                                    size: 16 // Font size for y-axis title
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            titleFont: {
+                                size: 14 // Font size for tooltip title
+                            },
+                            bodyFont: {
+                                size: 12 // Font size for tooltip body
+                            }
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        }
+                    }
+                }
+            };
+        }
+
+        // Chart Configurations
+        const configV1 = getChartConfig(labels, dataV1, 'V1');
+        const configV2 = getChartConfig(labels, dataV2, 'V2');
+        const configV3 = getChartConfig(labels, dataV3, 'V3');
+        const configV4 = getChartConfig(labels, dataV4, 'V4');
+        const configV12 = getChartConfig(labels, dataV12, 'V12');
+
+        // Render Charts
+        new Chart(document.getElementById('chartV1'), configV1);
+        new Chart(document.getElementById('chartV2'), configV2);
+        new Chart(document.getElementById('chartV3'), configV3);
+        new Chart(document.getElementById('chartV4'), configV4);
+        new Chart(document.getElementById('chartV12'), configV12);
+    </script>
+</body>
+</html>

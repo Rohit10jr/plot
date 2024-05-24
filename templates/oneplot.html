@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChartJS Plots</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #chartContainer {
+            width: 90%;
+            height: 80vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="chartContainer">
+        <canvas id="chartAll"></canvas>
+    </div>
+
+    <script>
+        // Data passed from Flask
+        const data = {{ data|tojson }};
+
+        // Extract data for plotting
+        const labels = data.map(item => item.tt);
+        const dataV1 = data.map(item => item.V1);
+        const dataV2 = data.map(item => item.V2);
+        const dataV3 = data.map(item => item.V3);
+        const dataV4 = data.map(item => item.V4);
+        const dataV12 = data.map(item => item.V12);
+
+        const interval = 100;
+
+        // Chart configuration
+        const config = {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'V1',
+                        data: dataV1,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'V2',
+                        data: dataV2,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'V3',
+                        data: dataV3,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'V4',
+                        data: dataV4,
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'V12',
+                        data: dataV12,
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1,
+                        fill: false,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            autoSkip: false,
+                            maxTicksLimit: Math.ceil(labels.length / interval),
+                            callback: function(value, index) {
+                                return index % interval === 0 ? this.getLabelForValue(value) : '';
+                            },
+                            font: {
+                                size: 14
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(200, 200, 200, 1)',
+                            backgroundColor: 'rgba(240, 240, 240, 0.3)',
+                        },
+                        title: {
+                            display: true,
+                            text: 'tt',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(200, 200, 200, 1)',
+                            backgroundColor: 'rgba(240, 240, 240, 0.3)',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Values',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        position: 'nearest',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 12
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y;
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    }
+                }
+            }
+        };
+
+        // Render Chart
+        new Chart(document.getElementById('chartAll'), config);
+    </script>
+</body>
+</html>
